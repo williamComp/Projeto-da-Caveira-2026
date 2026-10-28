@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Esqueleto.slnx"
+    "dotnet.defaultSolution": "Projeto-da-Caveira-2026.slnx"
 }
