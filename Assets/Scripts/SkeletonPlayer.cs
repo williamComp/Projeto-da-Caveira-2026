@@ -37,9 +37,22 @@ public class SkeletonPlayer : MonoBehaviour
     private CharacterController controller;
 
 
-    // Guarda a velocidade atual da caveira no eixo vertical.
+    
+
+    //Variáveis globais - estados do personagem
+    private bool estaMovendo;
+    private bool estaMovendoParaTras;
+    private bool estaCorrendo;
+    private bool estaNoChao;
+    private bool estaCaindo;
+    private bool estaPulando;
+
+    //Variáveis globais - velocidades
+    private float velocidadeAtual;
     private float velocidadeVertical;
 
+    //Variáveis globais - moeda
+    private int moedasColetadas = 0;
 
     void Start()
     {
@@ -47,28 +60,30 @@ public class SkeletonPlayer : MonoBehaviour
         controller = GetComponent<CharacterController>();
     }
 
-    bool Movimento()
+    public void ColetarMoeda()
+    {
+        moedasColetadas++;
+
+        Debug.Log("Moedas coletadas: " + moedasColetadas);
+    }
+
+
+    void Movimento()
     {
         bool pressionandoW = Input.GetKey(KeyCode.W);
         bool pressionandoS = Input.GetKey(KeyCode.S);
 
-        bool estaMovendo =
+        estaMovendo =
             pressionandoW && !pressionandoS;
 
-        bool estaMovendoParaTras =
+        estaMovendoParaTras =
             pressionandoS && !pressionandoW;
-
-        if(estaMovendo == true)
-            return estaMovendo;
-
-        if(estaMovendoParaTras == true)
-            return estaMovendoParaTras;
     }
 
     void Corrida()
     {
         // Só pode correr quando estiver indo para frente.
-        bool estaCorrendo =
+        estaCorrendo =
             estaMovendo &&
             (Input.GetKey(KeyCode.LeftShift) ||
              Input.GetKey(KeyCode.RightShift));
@@ -107,7 +122,7 @@ public class SkeletonPlayer : MonoBehaviour
 
     void VelocidadeHorizontal()
     {
-        float velocidadeAtual = 0f;
+        velocidadeAtual = 0f;
 
         if (estaMovendo)
         {
@@ -128,7 +143,7 @@ public class SkeletonPlayer : MonoBehaviour
 
     void Gravidade()
     {
-        bool estaNoChao = controller.isGrounded;
+        estaNoChao = controller.isGrounded;
 
         if (estaNoChao && velocidadeVertical < 0f)
         {
@@ -172,7 +187,7 @@ public class SkeletonPlayer : MonoBehaviour
         //
         // 1. não está encostando no chão;
         // 2. sua velocidade vertical está apontando para baixo.
-        bool estaCaindo =
+        estaCaindo =
             !controller.isGrounded &&
             velocidadeVertical < -0.1f;
     }
@@ -181,7 +196,7 @@ public class SkeletonPlayer : MonoBehaviour
     {
         // A caveira está pulando enquanto estiver no ar
         // e sua velocidade vertical estiver apontando para cima.
-        bool estaPulando =
+        estaPulando =
             !controller.isGrounded &&
             velocidadeVertical > 0.1f;
     }
